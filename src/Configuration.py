@@ -64,7 +64,16 @@ class Configuration:
 
         # Clears the buffers and sets DEPTH_TEST to remove hidden surfaces
         gl.glClear(gl.GL_COLOR_BUFFER_BIT|gl.GL_DEPTH_BUFFER_BIT)                  
-        gl.glEnable(gl.GL_DEPTH_TEST)   
+        gl.glEnable(gl.GL_DEPTH_TEST)  
+        
+        gl.glPolygonMode(gl.GL_FRONT_AND_BACK, gl.GL_FILL) # on trace les faces : GL_FILL
+        gl.glBegin(gl.GL_QUADS) # Tracé d’un quadrilatère
+        gl.glColor3fv([0.5, 0.5, 0.5]) # Couleur gris moyen
+        gl.glVertex3fv([0, 0, 0])
+        gl.glVertex3fv([1, 0, 0])
+        gl.glVertex3fv([1, 0, 1])
+        gl.glVertex3fv([0, 0, 1])
+        gl.glEnd()
         
     # Initializes the tranformation matrix    
     def initializeTransformationMatrix(self):     
@@ -163,29 +172,20 @@ class Configuration:
                 gl.glTranslatef(0,-0.1,0)
             elif (self.event.button == 5):
                 gl.glTranslatef(0,0.1,0)
-
-
+                
             
     # Processes the MOUSEMOTION event
     def processMouseMotionEvent(self):
         if self.event.type == pygame.MOUSEMOTION:
             if (pygame.mouse.get_pressed()[0] == 1):
-                gl.glRotatef(2.5,0,0,1)
-                gl.glRotatef(2.5,1,0,0)
+                gl.glRotatef(self.event.rel[0],0,0,1)
+                gl.glRotatef(self.event.rel[1],1,0,0)
             if (pygame.mouse.get_pressed()[2] == 1):
-                gl.glTranslate(self.event.rel[0]/100,0,0)
-                gl.glTranslate(0,0,self.event.rel[1]/100)
-                
-                
-        
-        
-        
-        
-        
-         
+                gl.glTranslate(self.event.rel[0]/50,0,0)
+                gl.glTranslate(0,0,-self.event.rel[1]/50)
+
     # Displays on screen and processes events    
-    def display(self): 
-           
+    def display(self):
         # Displays on screen
         self.draw()
         pygame.display.flip() 
